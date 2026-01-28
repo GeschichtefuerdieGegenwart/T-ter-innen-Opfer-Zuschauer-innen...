@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historische Kategorisierung - Nationalsozialismus</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-perpetrators: #8B0000;
+            --color-victims: #001A4D;
+            --color-bystanders: #808080;
+            --color-helpers: #1B4D2B;
+            --color-beneficiaries: #CC6600;
+            --color-bg: #f5f5f5;
+            --color-text: #333;
+            --color-light: #ffffff;
+            --color-border: #ddd;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 16px;
+            opacity: 0.95;
+            max-width: 800px;
+        }
+
+        /* INTRO SECTION */
+        .intro-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 5px solid var(--color-perpetrators);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .intro-section h2 {
+            font-size: 22px;
+            margin-bottom: 16px;
+            color: #2c3e50;
+        }
+
+        .intro-section p {
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .categories-explanation {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .category-info {
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid;
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        .category-info.perpetrators { border-left-color: var(--color-perpetrators); }
+        .category-info.victims { border-left-color: var(--color-victims); }
+        .category-info.bystanders { border-left-color: var(--color-bystanders); }
+        .category-info.helpers { border-left-color: var(--color-helpers); }
+        .category-info.beneficiaries { border-left-color: var(--color-beneficiaries); }
+
+        .category-info strong {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        /* INSTRUCTIONS */
+        .instructions {
+            background: #e8f4f8;
+            border: 1px solid #b3d9e8;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            border-left: 5px solid #0099cc;
+        }
+
+        .instructions h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #006699;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        /* CARDS SECTION */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .card.dragging {
+            opacity: 0.7;
+            cursor: grabbing;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            padding: 8px;
+            object-fit: cover;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2c3e50;
+        }
+
+        .card-description {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            flex-grow: 1;
+        }
+
+        .card-checkboxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin: 10px 0;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2c3e50;
+        }
+
+        .checkbox-item label {
+            font-size: 11px;
+            color: #333;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .card-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+            min-height: 22px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            animation: slideIn 0.2s ease;
+        }
+
+        .badge.perpetrators { background: var(--color-perpetrators); }
+        .badge.victims { background: var(--color-victims); }
+        .badge.bystanders { background: var(--color-bystanders); }
+        .badge.helpers { background: var(--color-helpers); }
+        .badge.beneficiaries { background: var(--color-beneficiaries); }
+
+        .badge-remove {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0 4px;
+            font-size: 12px;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .badge-remove:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: scaleX(0.8); }
+            to { opacity: 1; transform: scaleX(1); }
+        }
+
+        /* CATEGORIES SECTION */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-box {
+            background: white;
+            border: 3px dashed var(--color-border);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .category-box.perpetrators { border-color: var(--color-perpetrators); }
+        .category-box.victims { border-color: var(--color-victims); }
+        .category-box.bystanders { border-color: var(--color-bystanders); }
+        .category-box.helpers { border-color: var(--color-helpers); }
+        .category-box.beneficiaries { border-color: var(--color-beneficiaries); }
+
+        .category-box.drag-over {
+            background: #f9f9f9;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .category-header {
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            margin: -20px -20px 15px -20px;
+            padding: 15px 20px;
+        }
+
+        .category-header.perpetrators { background: var(--color-perpetrators); }
+        .category-header.victims { background: var(--color-victims); }
+        .category-header.bystanders { background: var(--color-bystanders); }
+        .category-header.helpers { background: var(--color-helpers); }
+        .category-header.beneficiaries { background: var(--color-beneficiaries); }
+
+        .category-description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .category-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 200px;
+        }
+
+        .category-item {
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            border-left: 4px solid #ccc;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-item:hover {
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .category-item-text {
+            flex: 1;
+        }
+
+        .category-item-remove {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .category-item-remove:hover {
+            background: #ff5252;
+        }
+
+        .category-counter {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* FOOTER */
+        .footer-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 40px;
+            border-top: 3px solid #2c3e50;
+        }
+
+        .footer-section h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #2c3e50;
+        }
+
+        .footer-section p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .cards-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 10px;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-box {
+                min-height: 300px;
+            }
+        }
+
+        /* ACCESSIBILITY */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        :focus-visible {
+            outline: 2px solid #2c3e50;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <h1>🏛️ Historische Kategorisierung im Nationalsozialismus</h1>
+            <p>Erkunde das Hilberg-Modell: Kategorisiere historische Akteur*innen und erkenne, dass Geschichte komplexer ist als einfache Kategorien.</p>
+        </header>
+
+        <!-- INTRO -->
+        <div class="intro-section">
+            <h2>Das Kategorisierungsmodell von Raul Hilberg</h2>
+            <p>Der Historiker Raul Hilberg entwickelte ein Modell, um historische Akteur*innen im Nationalsozialismus einzuordnen. Es hilft uns zu verstehen, dass Menschen verschiedene Rollen spielten – manchmal gleichzeitig.</p>
+            <p><strong>Wichtig:</strong> Es gibt oft keine „richtigen" Antworten. Viele historische Akteur*innen gehören zu mehreren Kategorien gleichzeitig. Das ist das moralische Dilemma der Geschichte.</p>
+
+            <div class="categories-explanation">
+                <div class="category-info perpetrators">
+                    <strong>Täter*innen</strong>
+                    Personen/Gruppen, die aktiv Verfolgung und Verbrechen betrieben
+                </div>
+                <div class="category-info victims">
+                    <strong>Opfer</strong>
+                    Personen/Gruppen, die von Verfolgung und Vernichtung betroffen waren
+                </div>
+                <div class="category-info bystanders">
+                    <strong>Zuschauer*innen</strong>
+                    Personen, die nicht aktiv eingriffen, aber Zeug*innen waren
+                </div>
+                <div class="category-info helpers">
+                    <strong>Helfer*innen</strong>
+                    Personen/Gruppen, die Verfolgte retteten und unterstützten
+                </div>
+                <div class="category-info beneficiaries">
+                    <strong>Nutznießer*innen</strong>
+                    Personen/Gruppen, die vom Terrorregime profitierten
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTRUCTIONS -->
+        <div class="instructions">
+            <h3>📋 Anleitung:</h3>
+            <ol>
+                <li><strong>Lese jede Karte</strong> sorgfältig und verstehe den Kontext der Person/Gruppe</li>
+                <li><strong>Wähle Kategorien</strong> über die Checkboxen auf der Karte oder ziehe die Karte zu den Kategorien (Mehrfachzuordnung ist erlaubt!)</li>
+                <li><strong>Entscheide bewusst</strong>: Zu welchen Kategorien gehört diese Person/Gruppe?</li>
+                <li><strong>Diskutiere</strong> mit Mitschüler*innen: Warum hast du diese Entscheidung getroffen?</li>
+            </ol>
+        </div>
+
+        <!-- CARDS -->
+        <h2>📇 Historische Akteur*innen</h2>
+        <div class="cards-grid" id="cardsGrid"></div>
+
+        <!-- CATEGORIES -->
+        <h2>📍 Kategorisierung</h2>
+        <div class="categories-grid" id="categoriesGrid"></div>
+
+        <!-- FOOTER -->
+        <div class="footer-section">
+            <h3>📚 Akademische Grundlagen</h3>
+            <p><strong>Hilberg, Raul (1992):</strong> "Perpetrators, Victims, Bystanders: The Jewish Catastrophe, 1933-1945" – Begründer des Kategorisierungsmodells.</p>
+            <p><strong>Levi, Primo (1986):</strong> "The Drowned and the Saved", Kapitel "The Grey Zone" – Kritik an einfachen Täter-Opfer-Dualismen.</p>
+            <p><strong>Gross, Jan G. (2006):</strong> "Fear: Anti-Semitism in Poland after Auschwitz" – Erweiterung um Helpers und Beneficiaries.</p>
+            <p><strong>Hanisch, Ernst (2010):</strong> "Opfer / Täter / Mythos" – Kritik an essentialistischen historischen Kategorien.</p>
+            <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px;"><strong>📷 Bildquellen:</strong> Historische Fotos aus dem Deutschen Bundesarchiv und Wikimedia Commons, lizenziert unter CC BY-SA 3.0 DE. Public Domain Fotos von Anne Frank und anderen Persönlichkeiten. Alle Bilder sind Archivmaterial aus der NS-Zeit.</p>
+        </div>
+    </div>
+
+    <script>
+        // DATA: HISTORICAL FIGURES WITH REAL IMAGES
+        const cardsData = [
+            {
+                id: 'ss',
+                title: 'SS (Schutzstaffel)',
+                description: 'Paramilitärische NS-Organisation, direkt an Verfolgung und Verbrechen beteiligt',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/9da42b93-fa6c-49b7-bc75-a14d4187d07f',
+                imageAlt: 'SS-Untersturmführer in Uniform, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'wehr',
+                title: 'Wehrmacht (Institution)',
+                description: 'Die deutsche Armee. Viele Soldaten in Kriegsverbrechen verwickelt, besonders an der Ostfront',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/11570565-e65c-4997-bf60-aeeb1de8f25d',
+                imageAlt: 'Wehrmacht-Soldat auf Wacht, Nordfrankreich, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'einzelsoldat',
+                title: 'Ein einzelner Soldat',
+                description: 'Einfacher Soldat, der Befehle ausführte – Schuldverhältnisse unklar',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/26ad2d26-b6cf-4f5c-8ecf-e9395342f790',
+                imageAlt: 'Einzelner Soldat in Feuerstellung, Russland, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'nsdapwaehler',
+                title: 'NSDAP-Wähler*innen 1933',
+                description: 'Personen, die NSDAP wählten (ca. 44% der Wähler*innen)',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/7c334a12-71d2-4050-b611-a50b810e46f1',
+                imageAlt: 'NS-Propagandaveranstaltung, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'andereparteien',
+                title: 'Wähler*innen anderer Parteien 1933',
+                description: 'Personen, die SPD, Zentrum, KPD oder andere Parteien wählten',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/5c334a12-71d2-4050-b611-a50b810e46f1',
+                imageAlt: 'Deutsche Bevölkerung während NS-Zeit, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'annefrank',
+                title: 'Anne Frank (im Versteck)',
+                description: 'Jüdisches Mädchen im Versteck – Opfer und Widerstands-Symbol',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/a36ee274-ab49-471e-9cbd-20340fd53608',
+                imageAlt: 'Anne Frank Porträt, 1940, Anne Frank House, Public Domain',
+                categories: []
+            },
+            {
+                id: 'miepgies',
+                title: 'Miep Gies (Helferin)',
+                description: 'Versteckte Anne Frank und ihre Familie – wichtigste Helferin',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/f7b8cb50-9672-435d-ae38-9f064b274862',
+                imageAlt: 'Miep Gies Porträt, 1987, Wikimedia Commons',
+                categories: []
+            },
+            {
+                id: 'scholl',
+                title: 'Geschwister Scholl (Weiße Rose)',
+                description: 'Sophie und Hans Scholl, Widerstandskämpfer*innen, wegen Flugblätter hingerichtet',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/201cc3ea-504b-481a-a1cc-fcf8283bbb03',
+                imageAlt: 'Sophie Scholl Porträt, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'stauffenberg',
+                title: 'Claus Schenk Graf von Stauffenberg',
+                description: 'Offizier der Wehrmacht, später Widerstandskämpfer – versuchte Hitler zu töten',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/4c607baa-a254-4211-b6e0-07c816924794',
+                imageAlt: 'Claus von Stauffenberg in Uniform mit Augenklappe, Bundesarchiv',
+                categories: []
+            },
+            {
+                id: 'judenrat',
+                title: 'Mitglieder eines Judenrats',
+                description: 'Führte NS-Befehle in Ghettos aus – gezwungen zu kollaborieren',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/4494c9cb-d79b-4cf8-b38e-5fe22e7fc888',
+                imageAlt: 'Jüdische Ghetto-Polizei, Warschau, Yad Vashem',
+                categories: []
+            },
+            {
+                id: 'partisanen',
+                title: 'Jüdische Partisanen',
+                description: 'Jüdische Widerstandskämpfer*innen, die sich bewaffnet gegen Nazis verteidigten',
+                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/2ffdd487-f1dc-475c-a5ac-25876f615174',
+                imageAlt: 'Jüdische Partisanen in Russland, 1944, USHMM',
+                categories: []
+            }
+        ];
+
+        // CATEGORIES DATA
+        const categoriesData = [
+            {
+                id: 'perpetrators',
+                title: 'Täter*innen',
+                description: 'Personen/Gruppen, die aktiv Verfolgung und Verbrechen betrieben',
+                color: 'perpetrators'
+            },
+            {
+                id: 'victims',
+                title: 'Opfer',
+                description: 'Personen/Gruppen, die von Verfolgung betroffen waren',
+                color: 'victims'
+            },
+            {
+                id: 'bystanders',
+                title: 'Zuschauer*innen',
+                description: 'Personen, die nicht aktiv eingriffen',
+                color: 'bystanders'
+            },
+            {
+                id: 'helpers',
+                title: 'Helfer*innen',
+                description: 'Personen/Gruppen, die Verfolgte retteten und unterstützten',
+                color: 'helpers'
+            },
+            {
+                id: 'beneficiaries',
+                title: 'Nutznießer*innen',
+                description: 'Personen/Gruppen, die vom System profitierten',
+                color: 'beneficiaries'
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let state = {
+            cards: cardsData.map(card => ({
+                ...card,
+                assignments: card.categories
+            })),
+            draggedCard: null
+        };
+
+        // INITIALIZE APP
+        function initApp() {
+            renderCards();
+            renderCategories();
+        }
+
+        // RENDER CARDS
+        function renderCards() {
+            const cardsGrid = document.getElementById('cardsGrid');
+            cardsGrid.innerHTML = '';
+
+            state.cards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card';
+                cardEl.draggable = true;
+                cardEl.id = `card-${card.id}`;
+
+                cardEl.innerHTML = `
+                    <div class="card-image">
+                        <img src="${card.imageUrl}" alt="${card.imageAlt}" onerror="this.style.display='none';">
+                    </div>
+                    <div class="card-title">${card.title}</div>
+                    <div class="card-description">${card.description}</div>
+                    <div class="card-badges" id="badges-${card.id}"></div>
+                    <div class="card-checkboxes" id="checkboxes-${card.id}">
+                        ${categoriesData.map(cat => `
+                            <div class="checkbox-item">
+                                <input 
+                                    type="checkbox" 
+                                    id="cb-${card.id}-${cat.id}"
+                                    onchange="toggleCategoryForCard('${card.id}', '${cat.id}')"
+                                    aria-label="Zuordnen zu: ${cat.title}"
+                                >
+                                <label for="cb-${card.id}-${cat.id}">${cat.title.substring(0, 8)}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                cardEl.addEventListener('dragstart', dragStart);
+                cardEl.addEventListener('dragend', dragEnd);
+
+                cardsGrid.appendChild(cardEl);
+                updateCardDisplay(card.id);
+            });
+        }
+
+        // RENDER CATEGORIES
+        function renderCategories() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            categoriesGrid.innerHTML = '';
+
+            categoriesData.forEach(cat => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = `category-box ${cat.color}`;
+                categoryEl.id = `category-${cat.id}`;
+
+                const itemsInCategory = state.cards.filter(card => 
+                    card.assignments.includes(cat.id)
+                );
+
+                let itemsHTML = itemsInCategory.map(card => `
+                    <div class="category-item">
+                        <div class="category-item-text">
+                            ${card.title}
+                        </div>
+                        <button class="category-item-remove" onclick="removeFromCategory('${card.id}', '${cat.id}')">✕</button>
+                    </div>
+                `).join('');
+
+                categoryEl.innerHTML = `
+                    <div class="category-header ${cat.color}">${cat.title}</div>
+                    <div class="category-description">${cat.description}</div>
+                    <div class="category-items" ondrop="drop(event, '${cat.id}')" ondragover="dragOver(event)">
+                        ${itemsHTML}
+                    </div>
+                    <div class="category-counter">${itemsInCategory.length} Eintrag(en)</div>
+                `;
+
+                categoriesGrid.appendChild(categoryEl);
+            });
+        }
+
+        // DRAG & DROP FUNCTIONS
+        function dragStart(e) {
+            const cardId = e.target.closest('.card').id.replace('card-', '');
+            state.draggedCard = cardId;
+            e.target.closest('.card').classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'copy';
+        }
+
+        function dragEnd(e) {
+            e.target.closest('.card').classList.remove('dragging');
+            document.querySelectorAll('.category-box').forEach(box => {
+                box.classList.remove('drag-over');
+            });
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy';
+            e.target.closest('.category-box')?.classList.add('drag-over');
+        }
+
+        function drop(e, categoryId) {
+            e.preventDefault();
+            e.target.closest('.category-box').classList.remove('drag-over');
+
+            if (state.draggedCard) {
+                toggleCategoryForCard(state.draggedCard, categoryId);
+            }
+            state.draggedCard = null;
+        }
+
+        // UTILITY FUNCTIONS
+        function toggleCategoryForCard(cardId, categoryId) {
+            const card = state.cards.find(c => c.id === cardId);
+            if (card) {
+                const idx = card.assignments.indexOf(categoryId);
+                if (idx > -1) {
+                    card.assignments.splice(idx, 1);
+                } else {
+                    card.assignments.push(categoryId);
+                }
+                updateCardDisplay(cardId);
+                renderCategories();
+            }
+        }
+
+        function updateCardDisplay(cardId) {
+            const card = state.cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            // Update checkboxes
+            categoriesData.forEach(cat => {
+                const checkbox = document.getElementById(`cb-${cardId}-${cat.id}`);
+                if (checkbox) {
+                    checkbox.checked = card.assignments.includes(cat.id);
+                }
+            });
+
+            // Update badges
+            const badgesContainer = document.getElementById(`badges-${cardId}`);
+            if (badgesContainer) {
+                badgesContainer.innerHTML = card.assignments.map(catId => {
+                    const cat = categoriesData.find(c => c.id === catId);
+                    return `
+                        <div class="badge ${catId}">
+                            ${cat.title}
+                            <button class="badge-remove" onclick="toggleCategoryForCard('${cardId}', '${catId}')" aria-label="Entfernen">×</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function removeFromCategory(cardId, categoryId) {
+            toggleCategoryForCard(cardId, categoryId);
+        }
+
+        // START APP
+        initApp();
+    </script>
+</body>
+</html>
