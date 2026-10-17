@@ -450,6 +450,15 @@
             outline-offset: 2px;
         }
     </style>
+<style id="moodle-anpassung">
+/* Überarbeitung Oktober 2026: Barrierearmut und Moodle */
+:focus-visible{outline:3px solid #1d4ed8 !important;outline-offset:2px !important}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}
+.mdl-hinweis{max-width:900px;margin:12px auto;padding:12px 16px;border-left:4px solid #1d4ed8;background:#eef3fb;color:#1f2a37;border-radius:6px;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;text-align:left}
+.mdl-hinweis b{font-weight:700}
+.mdl-bildquellen{max-width:900px;margin:24px auto;padding:8px 16px;font:13px/1.5 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#444;text-align:left}
+.mdl-bildquellen a{color:#1d4ed8;word-break:break-all}
+</style>
 </head>
 <body>
     <div class="container">
@@ -493,7 +502,7 @@
         <div class="instructions">
             <h3>📋 Anleitung:</h3>
             <ol>
-                <li><strong>Lese jede Karte</strong> sorgfältig und verstehe den Kontext der Person/Gruppe</li>
+                <li><strong>Lies jede Karte</strong> sorgfältig und verstehe den Kontext der Person/Gruppe</li>
                 <li><strong>Wähle Kategorien</strong> über die Checkboxen auf der Karte oder ziehe die Karte zu den Kategorien (Mehrfachzuordnung ist erlaubt!)</li>
                 <li><strong>Entscheide bewusst</strong>: Zu welchen Kategorien gehört diese Person/Gruppe?</li>
                 <li><strong>Diskutiere</strong> mit Mitschüler*innen: Warum hast du diese Entscheidung getroffen?</li>
@@ -511,11 +520,10 @@
         <!-- FOOTER -->
         <div class="footer-section">
             <h3>📚 Akademische Grundlagen</h3>
-            <p><strong>Hilberg, Raul (1992):</strong> "Perpetrators, Victims, Bystanders: The Jewish Catastrophe, 1933-1945" – Begründer des Kategorisierungsmodells.</p>
+            <p><strong>Hilberg, Raul (1992):</strong> "Perpetrators, Victims, Bystanders: The Jewish Catastrophe, 1933-1945" (deutsch: »Täter, Opfer, Zuschauer«) – unterscheidet drei Gruppen.</p>
             <p><strong>Levi, Primo (1986):</strong> "The Drowned and the Saved", Kapitel "The Grey Zone" – Kritik an einfachen Täter-Opfer-Dualismen.</p>
-            <p><strong>Gross, Jan G. (2006):</strong> "Fear: Anti-Semitism in Poland after Auschwitz" – Erweiterung um Helpers und Beneficiaries.</p>
-            <p><strong>Hanisch, Ernst (2010):</strong> "Opfer / Täter / Mythos" – Kritik an essentialistischen historischen Kategorien.</p>
-            <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px;"><strong>📷 Bildquellen:</strong> Historische Fotos aus dem Deutschen Bundesarchiv und Wikimedia Commons, lizenziert unter CC BY-SA 3.0 DE. Public Domain Fotos von Anne Frank und anderen Persönlichkeiten. Alle Bilder sind Archivmaterial aus der NS-Zeit.</p>
+            <p><strong>Helfer*innen und Nutznießer*innen:</strong> Diese beiden Kategorien ergänzen Hilbergs drei Gruppen. Sie stammen nicht von Hilberg selbst, sondern aus der späteren Forschung und Bildungsarbeit.</p>
+                        <p style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px;"><strong>📷 Bildquellen:</strong> Historische Fotos aus dem Deutschen Bundesarchiv und Wikimedia Commons, lizenziert unter CC BY-SA 3.0 DE. Public Domain Fotos von Anne Frank und anderen Persönlichkeiten. Die Fotos liegen im Ordner »bilder«. Herkunft und Lizenz je Foto vor einer Weitergabe außerhalb des Kurses prüfen.</p>
         </div>
     </div>
 
@@ -526,88 +534,88 @@
                 id: 'ss',
                 title: 'SS (Schutzstaffel)',
                 description: 'Paramilitärische NS-Organisation, direkt an Verfolgung und Verbrechen beteiligt',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/9da42b93-fa6c-49b7-bc75-a14d4187d07f',
-                imageAlt: 'SS-Untersturmführer in Uniform, Bundesarchiv',
+                imageUrl: 'bilder/ss.jpg',
+                imageAlt: 'Angehörige der SS (historisches Foto)',
                 categories: []
             },
             {
                 id: 'wehr',
                 title: 'Wehrmacht (Institution)',
                 description: 'Die deutsche Armee. Viele Soldaten in Kriegsverbrechen verwickelt, besonders an der Ostfront',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/11570565-e65c-4997-bf60-aeeb1de8f25d',
-                imageAlt: 'Wehrmacht-Soldat auf Wacht, Nordfrankreich, Bundesarchiv',
+                imageUrl: 'bilder/wehrmacht.jpg',
+                imageAlt: 'Soldaten der Wehrmacht beim Appell (historisches Foto)',
                 categories: []
             },
             {
                 id: 'einzelsoldat',
                 title: 'Ein einzelner Soldat',
                 description: 'Einfacher Soldat, der Befehle ausführte – Schuldverhältnisse unklar',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/26ad2d26-b6cf-4f5c-8ecf-e9395342f790',
-                imageAlt: 'Einzelner Soldat in Feuerstellung, Russland, Bundesarchiv',
+                imageUrl: 'bilder/soldat.jpg',
+                imageAlt: 'Einzelner Soldat der Wehrmacht (historisches Foto)',
                 categories: []
             },
             {
                 id: 'nsdapwaehler',
                 title: 'NSDAP-Wähler*innen 1933',
                 description: 'Personen, die NSDAP wählten (ca. 44% der Wähler*innen)',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/7c334a12-71d2-4050-b611-a50b810e46f1',
-                imageAlt: 'NS-Propagandaveranstaltung, Bundesarchiv',
+                imageUrl: '',
+                imageAlt: '',
                 categories: []
             },
             {
                 id: 'andereparteien',
                 title: 'Wähler*innen anderer Parteien 1933',
                 description: 'Personen, die SPD, Zentrum, KPD oder andere Parteien wählten',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/5c334a12-71d2-4050-b611-a50b810e46f1',
-                imageAlt: 'Deutsche Bevölkerung während NS-Zeit, Bundesarchiv',
+                imageUrl: 'bilder/waehler-1933.jpg',
+                imageAlt: 'Menschen auf einer Straße um 1933 (historisches Foto)',
                 categories: []
             },
             {
                 id: 'annefrank',
                 title: 'Anne Frank (im Versteck)',
                 description: 'Jüdisches Mädchen im Versteck – Opfer und Widerstands-Symbol',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/a36ee274-ab49-471e-9cbd-20340fd53608',
-                imageAlt: 'Anne Frank Porträt, 1940, Anne Frank House, Public Domain',
+                imageUrl: 'bilder/anne-frank.jpg',
+                imageAlt: 'Anne Frank, Schulfoto (um 1940)',
                 categories: []
             },
             {
                 id: 'miepgies',
                 title: 'Miep Gies (Helferin)',
                 description: 'Versteckte Anne Frank und ihre Familie – wichtigste Helferin',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/f7b8cb50-9672-435d-ae38-9f064b274862',
-                imageAlt: 'Miep Gies Porträt, 1987, Wikimedia Commons',
+                imageUrl: 'bilder/miep-gies.jpg',
+                imageAlt: 'Miep Gies im Alter mit einem Buch',
                 categories: []
             },
             {
                 id: 'scholl',
                 title: 'Geschwister Scholl (Weiße Rose)',
                 description: 'Sophie und Hans Scholl, Widerstandskämpfer*innen, wegen Flugblätter hingerichtet',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/201cc3ea-504b-481a-a1cc-fcf8283bbb03',
-                imageAlt: 'Sophie Scholl Porträt, Bundesarchiv',
+                imageUrl: 'bilder/weisse-rose.jpg',
+                imageAlt: 'Hans und Sophie Scholl (Porträts)',
                 categories: []
             },
             {
                 id: 'stauffenberg',
                 title: 'Claus Schenk Graf von Stauffenberg',
                 description: 'Offizier der Wehrmacht, später Widerstandskämpfer – versuchte Hitler zu töten',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/4c607baa-a254-4211-b6e0-07c816924794',
-                imageAlt: 'Claus von Stauffenberg in Uniform mit Augenklappe, Bundesarchiv',
+                imageUrl: 'bilder/stauffenberg.jpg',
+                imageAlt: 'Claus Schenk Graf von Stauffenberg (Porträt)',
                 categories: []
             },
             {
                 id: 'judenrat',
                 title: 'Mitglieder eines Judenrats',
                 description: 'Führte NS-Befehle in Ghettos aus – gezwungen zu kollaborieren',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/4494c9cb-d79b-4cf8-b38e-5fe22e7fc888',
-                imageAlt: 'Jüdische Ghetto-Polizei, Warschau, Yad Vashem',
+                imageUrl: 'bilder/judenrat.jpg',
+                imageAlt: 'Mitglieder eines Judenrats (historisches Foto)',
                 categories: []
             },
             {
                 id: 'partisanen',
                 title: 'Jüdische Partisanen',
                 description: 'Jüdische Widerstandskämpfer*innen, die sich bewaffnet gegen Nazis verteidigten',
-                imageUrl: 'https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/2ffdd487-f1dc-475c-a5ac-25876f615174',
-                imageAlt: 'Jüdische Partisanen in Russland, 1944, USHMM',
+                imageUrl: 'bilder/partisanen.jpg',
+                imageAlt: 'Jüdische Partisaninnen und Partisanen (historisches Foto)',
                 categories: []
             }
         ];
